@@ -7,8 +7,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 // require("dotenv").config();
 
-const PORT = 3000;
-
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
@@ -138,6 +137,6 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT,"0.0.0.0", () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
