@@ -16,7 +16,6 @@ app.use(cookieParser());
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-
 const MONGO_URI =
   "mongodb+srv://lukasio:rJYZ2NRas1Q00QAE@cluster0.w4nl6uh.mongodb.net/users";
 mongoose.connect(MONGO_URI);
@@ -30,6 +29,7 @@ db.on("connected", () => {
 db.on("error", (err) => {
   console.error("Error connecting to MongoDB:", err);
 });
+
 // Route for user sign-in
 app.post("/api/signin", async (req, res) => {
   try {
@@ -137,6 +137,17 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-app.listen(PORT,"0.0.0.0", () => {
+// Route to get all clients
+app.get("/api/clients", async (req, res) => {
+  try {
+    const clients = await Client.find();
+    res.status(200).json(clients);
+  } catch (error) {
+    console.error("Error fetching clients:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
