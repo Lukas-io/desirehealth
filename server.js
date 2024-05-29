@@ -83,7 +83,7 @@ app.post("/api/signin", async (req, res) => {
 });
 
 // Route for user sign-up
-app.get("/api/signup", async (req, res) => {
+app.post("/api/signup", async (req, res) => {
   try {
     const { email, password, userType, ...userData } = req.body;
 
