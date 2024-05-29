@@ -137,6 +137,43 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
+
+
+// Route to retrieve user data by ID
+app.get("/api/user/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // Check client collection
+    let user = await Client.findById(userId).exec();
+    let userType = "client";
+
+    // If user not found in client collection, check worker collection
+    if (!user) {
+      user = await Worker.findById(userId).exec();
+      userType = "worker";
+    }
+
+    // If user not found in worker collection, check organisation collection
+    if (!user) {
+      user = await Organisation.findById(userId).exec();
+      userType = "organisation";
+    }
+
+    // If user still not found, return error
+    if (!user) {
+      return res.status(404).json({ message: "User not found.", type: "error" });
+    }
+
+    // User found, return user data
+    res.status(200).json({ userType, user });
+  } catch (error) {
+    console.error("Error retrieving user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 // Route to get all clients
 app.get("/api/clients", async (req, res) => {
   try {
